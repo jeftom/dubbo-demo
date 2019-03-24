@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- 定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字 -->
+    <dubbo:application name="${dubbo.application.name}" owner="jeftom" organization="jeftom"  />
+
+    <!-- 使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper-->
+    <dubbo:registry id="zookeeper-registry" protocol="${dubbo.registry.protocol}" address="${dubbo.registry.address}" />
+
+    <!-- dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" accesslog="dubbo-access.log"/>
+    <dubbo:provider retries="0" timeout="30000"/>
+    <dubbo:monitor protocol="registry"/>
+
+    <!-- 使用 dubbo 协议实现定义好的 Service Api 接口-->
+    <dubbo:service interface="com.example.dubbo.demo.api.DemoApi" ref="DemoApiImpl" retries="0" timeout="60000" />
+</beans>
