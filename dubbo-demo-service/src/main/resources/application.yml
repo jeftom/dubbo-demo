@@ -1,0 +1,81 @@
+server:
+  port: 8087
+# 配置datasource
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://db.tencus.com:3306/seckill?characterEncoding=utf8&useSSL=true
+    username: root
+    password: vipshop
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      max-lifetime: 30000
+      idle-timeout: 30000
+      data-source-properties:
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        cachePrepStmts: true
+        useServerPrepStmts: true
+    slave:
+      url: jdbc:mysql://db.tencus.com:3306/seckill?characterEncoding=utf8&useSSL=true
+      username: root
+      password: vipshop
+      type: com.zaxxer.hikari.HikariDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        maximum-pool-size: 20
+        max-lifetime: 30000
+        idle-timeout: 30000
+        data-source-properties:
+          prepStmtCacheSize: 250
+          prepStmtCacheSqlLimit: 2048
+          cachePrepStmts: true
+          useServerPrepStmts: true
+
+
+#配置mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.dubbo.demo.service.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+# dubbo config
+# 应用定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字，方便辨识
+dubbo:
+  application:
+    name: dubbo-demo-service
+  # 应用所属者
+  owner: jeftom
+  # 应用所属组织
+  organization: jeftom
+
+  # 使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper
+  # 注册中心id
+  registry:
+    id: zookeeper-registry
+    # 注册中心协议
+    protocol: zookeeper
+    # 注册中心地址
+    address: zookeeper.tencus.com:2181
+
+  # dubbo协议在20880端口暴露服务
+  # 协议名称
+  protocol:
+    name: dubbo
+    # 协议端口
+    port: 20880
+    # 协议访问log
+    accesslog: dubbo-access.log
+  # 重试次数
+  provider:
+    retries: 0
+    # 超时时间
+    timeout: 3000
+  # 注册监控中心
+  monitor:
+    protocol: registry

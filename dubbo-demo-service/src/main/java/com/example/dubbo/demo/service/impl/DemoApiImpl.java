@@ -1,7 +1,14 @@
 package com.example.dubbo.demo.service.impl;
 
 import com.example.dubbo.demo.api.DemoApi;
+import com.example.dubbo.demo.service.config.DataSourceEnum;
+import com.example.dubbo.demo.service.config.DynamicDataSource;
+import com.example.dubbo.demo.service.mapper.SeckillMapper;
+import com.example.dubbo.demo.service.entity.Seckill;
 import org.apache.dubbo.config.annotation.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * class description
@@ -12,6 +19,9 @@ import org.apache.dubbo.config.annotation.Service;
  */
 @Service
 public class DemoApiImpl implements DemoApi {
+	@Resource
+	private SeckillMapper seckillMapper;
+
 	/**
 	 * 实现 sayHello 接口
 	 *
@@ -20,6 +30,8 @@ public class DemoApiImpl implements DemoApi {
 	 */
 	@Override
 	public String sayHello(String name) {
-		return "Hello, " + name + " (from Spring Boot with dubbo-2.7.1)";
+		DynamicDataSource.setDataSource(DataSourceEnum.SLAVE.getName());
+		List<Seckill> list = seckillMapper.queryAll(0,4);
+		return "Hello, " + name + " (from Spring Boot with dubbo-2.7.1)" + list.toString();
 	}
 }
